@@ -54,12 +54,12 @@
     from: "{{ mail['from'] }}"
     #to: "{{ item['value']['proponente'] }} {{ item['value']['email_proponente'] }}"
     to: "{{ item['value']['email_proponente'] }}"
-    bcc: michel.peterson@ufba.br
+    bcc: michel.peterson@domain.com
     subject: Informações de acesso e instruções para o Congresso Virtual UFBA 75 Anos"
     subtype: html
     body: "{{ lookup('file', 'roles/send_mail/templates/mail.j4.generated') }}"
     headers:
-    - Reply-To=mesas.congresso@ufba.br
+    - Reply-To=mesas.congresso@domain.com
     charset: utf-8
   ignore_errors: yes
   delegate_to: localhost
