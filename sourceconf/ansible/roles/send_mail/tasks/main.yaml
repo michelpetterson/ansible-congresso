@@ -1,0 +1,68 @@
+---
+- name: Copying template file...
+  shell: >
+    cp roles/send_mail/templates/mail.j4 roles/send_mail/templates/mail.j4.generated
+
+- name: Building...STEP 1/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_sala_'
+    replace: "{{ item['value']['sala'] }}"
+
+- name: Building...STEP 2/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_titulo_'
+    replace: "{{ item['value']['titulo'] }}"
+
+- name: Building...STEP 3/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_proponente_'
+    replace: "{{ item['value']['proponente'] }}"
+
+- name: Building...STEP 4/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_hora_'
+    replace: "{{ item['value']['hora'] }}"
+
+- name: Building...STEP 5/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_data_'
+    replace: "{{ item['value']['data'] }}"
+
+- name: Building...STEP 6/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_sy_url_'
+    replace: "{{ item['value']['sy_url'] }}"
+
+- name: Building...STEP 7/7
+  replace:
+    path: roles/send_mail/templates/mail.j4.generated
+    regexp: '_participantes_'
+    replace: "{{ item['value']['participantes'] }}"
+
+- name: Sending invite email...
+  mail:
+    host: "{{ smtp['host'] }}"
+    port: "{{ smtp['port'] }}"
+    username: "{{ smtp['user'] }}"
+    password: "{{ smtp['pass'] }}"
+    from: "{{ mail['from'] }}"
+    #to: "{{ item['value']['proponente'] }} {{ item['value']['email_proponente'] }}"
+    to: "{{ item['value']['email_proponente'] }}"
+    bcc: michel.peterson@ufba.br
+    subject: Informações de acesso e instruções para o Congresso Virtual UFBA 75 Anos"
+    subtype: html
+    body: "{{ lookup('file', 'roles/send_mail/templates/mail.j4.generated') }}"
+    headers:
+    - Reply-To=mesas.congresso@ufba.br
+    charset: utf-8
+  ignore_errors: yes
+  delegate_to: localhost
+
+- debug:
+    msg: "Mail Sent to: {{ item['value']['email_proponente'] }}"

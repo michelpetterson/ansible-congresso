@@ -1,0 +1,10 @@
+---
+smtp:
+  host: "smtps-corp.domain.com"
+  port: "465"
+  user: ""
+  pass: ''
+
+mail:
+  from: "congresso.mesas@domain.com (Congresso)"
+  reply: "congresso.mesas@domain.com"

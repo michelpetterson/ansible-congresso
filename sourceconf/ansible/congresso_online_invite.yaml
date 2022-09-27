@@ -1,0 +1,24 @@
+- hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars_files:
+    - vars.yaml
+
+  tasks:
+
+    - name: Reading CSV file...
+      read_csv:
+        key: id
+        path: data.csv
+        fieldnames: id,proponente,email_proponente,sala,data,hora,titulo,participantes,sy_url
+        delimiter: ';'
+      register: csvdata
+      delegate_to: localhost
+
+    - name: Looping role...
+      include_role:
+        name: send_mail
+      loop: "{{ csvdata.dict|dict2items }}"
+
+ 
